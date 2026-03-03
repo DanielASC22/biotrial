@@ -134,7 +134,8 @@
 
   .audit-highlight.selected {
     background-color: hsl(43 100% 50% / 0.35);
-    @apply ring-2 ring-amber-accent/60;
+    @apply ring-2;
+    --tw-ring-color: hsl(43 100% 50% / 0.6);
     box-shadow: 0 0 12px hsl(43 100% 50% / 0.2);
   }
 
@@ -150,7 +151,8 @@
 
   .audit-highlight.flagged {
     background-color: hsl(0 84% 60% / 0.12);
-    @apply text-destructive line-through decoration-destructive/60;
+    @apply text-destructive line-through;
+    text-decoration-color: hsl(0 84% 60% / 0.6);
   }
 
   .compliance-pulse {

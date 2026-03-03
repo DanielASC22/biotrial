@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import type { ClaimData } from "@/lib/claim-data";
 import { useAudit } from "@/contexts/AuditContext";
 import { isDoubleBlindRequired } from "@/lib/claim-data";
 import {
@@ -182,7 +183,7 @@ function StatCard({ label, count, total, icon, color }: {
   );
 }
 
-function ClaimTable({ claims, statusLabel }: { claims: import("@/lib/claim-data").ClaimData[]; statusLabel: string }) {
+function ClaimTable({ claims, statusLabel }: { claims: ClaimData[]; statusLabel: string }) {
   return (
     <div className="rounded-md border overflow-hidden">
       <table className="w-full text-xs">

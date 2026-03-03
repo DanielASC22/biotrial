@@ -1,7 +1,17 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, useMemo, type ReactNode } from "react";
 import { MOCK_CLAIMS, isDoubleBlindRequired, type ClaimData, type ClaimStatus } from "@/lib/claim-data";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+
+export interface SourceDocument {
+  id: string;
+  name: string;
+  uploadDate: string;
+  hashId: string;
+  auditor: string;
+  size: string;
+  linkedClaims: string[];
+}
 
 interface AuditContextType {
   claims: Record<string, ClaimData>;
@@ -11,6 +21,12 @@ interface AuditContextType {
   flagClaim: (id: string) => Promise<void>;
   pendingCount: number;
   verifiedCount: number;
+  tier3AllVerified: boolean;
+  documents: SourceDocument[];
+  addDocument: (doc: SourceDocument) => void;
+  selectedDocId: string | null;
+  selectDocument: (id: string | null) => void;
+  sessionHash: string;
 }
 
 const AuditContext = createContext<AuditContextType | null>(null);
@@ -21,7 +37,6 @@ export function useAudit() {
   return ctx;
 }
 
-// Generate a mock SHA-256-style hash for demo purposes
 function generateIntegrityHash(claimId: string, status: string): string {
   const chars = "0123456789abcdef";
   const seed = claimId + status + Date.now().toString();
@@ -32,19 +47,82 @@ function generateIntegrityHash(claimId: string, status: string): string {
   return hash;
 }
 
+const MOCK_DOCUMENTS: SourceDocument[] = [
+  {
+    id: "doc-001",
+    name: "Lab_Results_04.pdf",
+    uploadDate: "2026-02-28",
+    hashId: "a7c3f8e2b1d94f6a",
+    auditor: "Dr. Sarah Chen",
+    size: "2.4 MB",
+    linkedClaims: ["c001", "c003", "c004"],
+  },
+  {
+    id: "doc-002",
+    name: "Statistical_Analysis_Report.pdf",
+    uploadDate: "2026-02-27",
+    hashId: "e9b4d1c6f3a82e5d",
+    auditor: "Dr. James Miller",
+    size: "5.1 MB",
+    linkedClaims: ["c002"],
+  },
+  {
+    id: "doc-003",
+    name: "Randomization_Log.pdf",
+    uploadDate: "2026-02-25",
+    hashId: "c2d8f5a1e7b34c9f",
+    auditor: "Dr. Sarah Chen",
+    size: "890 KB",
+    linkedClaims: ["c005"],
+  },
+  {
+    id: "doc-004",
+    name: "AE_Summary_Report.pdf",
+    uploadDate: "2026-02-26",
+    hashId: "f6a3b9d2c8e14f7a",
+    auditor: "Dr. Priya Patel",
+    size: "3.7 MB",
+    linkedClaims: ["c006", "c007", "c008", "c009", "c010"],
+  },
+  {
+    id: "doc-005",
+    name: "SAE_Narrative_Report.pdf",
+    uploadDate: "2026-02-24",
+    hashId: "b1e7c4f9a3d62e8b",
+    auditor: "Dr. Priya Patel",
+    size: "1.2 MB",
+    linkedClaims: ["c011"],
+  },
+];
+
 export function AuditProvider({ children }: { children: ReactNode }) {
   const [claims, setClaims] = useState<Record<string, ClaimData>>({ ...MOCK_CLAIMS });
   const [selectedClaimId, setSelectedClaimId] = useState<string | null>(null);
+  const [documents, setDocuments] = useState<SourceDocument[]>(MOCK_DOCUMENTS);
+  const [selectedDocId, setSelectedDocId] = useState<string | null>(null);
+  const [sessionHash] = useState(() => generateIntegrityHash("session", "init"));
   const { toast } = useToast();
 
   const selectClaim = useCallback((id: string) => {
     setSelectedClaimId(id);
+    setSelectedDocId(null);
   }, []);
+
+  const selectDocument = useCallback((id: string | null) => {
+    setSelectedDocId(id);
+    setSelectedClaimId(null);
+  }, []);
+
+  const addDocument = useCallback((doc: SourceDocument) => {
+    setDocuments(prev => [doc, ...prev]);
+    toast({
+      title: "📄 Document Uploaded",
+      description: `${doc.name} added to Evidence Vault.`,
+    });
+  }, [toast]);
 
   const insertAuditLog = async (claim: ClaimData, status: "verified" | "flagged") => {
     const hash = generateIntegrityHash(claim.id, status);
-
-    // Try inserting to Supabase (will only work if user is authenticated)
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
@@ -57,9 +135,8 @@ export function AuditProvider({ children }: { children: ReactNode }) {
         });
       }
     } catch {
-      // Silently fail for demo — audit log insert requires auth
+      // Silently fail for demo
     }
-
     return hash;
   };
 
@@ -67,7 +144,6 @@ export function AuditProvider({ children }: { children: ReactNode }) {
     const claim = claims[id];
     if (!claim) return;
 
-    // Tier 3 double-blind: first click → awaiting_second, second click → verified
     if (isDoubleBlindRequired(claim) && claim.status === "pending") {
       setClaims(prev => ({
         ...prev,
@@ -81,12 +157,10 @@ export function AuditProvider({ children }: { children: ReactNode }) {
     }
 
     const hash = await insertAuditLog(claim, "verified");
-
     setClaims(prev => ({
       ...prev,
       [id]: { ...prev[id], status: "verified" as ClaimStatus },
     }));
-
     toast({
       title: "✓ Integrity Hash Verified",
       description: `Claim ${id} sealed. Hash: ${hash.slice(0, 16)}…`,
@@ -98,12 +172,10 @@ export function AuditProvider({ children }: { children: ReactNode }) {
     if (!claim) return;
 
     await insertAuditLog(claim, "flagged");
-
     setClaims(prev => ({
       ...prev,
       [id]: { ...prev[id], status: "flagged" as ClaimStatus },
     }));
-
     toast({
       title: "🚩 Discrepancy Flagged",
       description: `Claim ${id} flagged for manual review. Audit trail updated.`,
@@ -114,8 +186,18 @@ export function AuditProvider({ children }: { children: ReactNode }) {
   const pendingCount = Object.values(claims).filter(c => c.status === "pending" || c.status === "awaiting_second").length;
   const verifiedCount = Object.values(claims).filter(c => c.status === "verified").length;
 
+  const tier3AllVerified = useMemo(() => {
+    const tier3Claims = Object.values(claims).filter(c => isDoubleBlindRequired(c));
+    return tier3Claims.length > 0 && tier3Claims.every(c => c.status === "verified");
+  }, [claims]);
+
   return (
-    <AuditContext.Provider value={{ claims, selectedClaimId, selectClaim, verifyClaim, flagClaim, pendingCount, verifiedCount }}>
+    <AuditContext.Provider value={{
+      claims, selectedClaimId, selectClaim, verifyClaim, flagClaim,
+      pendingCount, verifiedCount, tier3AllVerified,
+      documents, addDocument, selectedDocId, selectDocument,
+      sessionHash,
+    }}>
       {children}
     </AuditContext.Provider>
   );

@@ -13,8 +13,8 @@ const ClaimSpan = ({ claimId, children }: ClaimSpanProps) => {
   const claim = claims[claimId];
   if (!claim) return <span>{children}</span>;
 
-  const statusClass = claim.status === "verified" ? "verified" : "";
-  const selectedClass = selectedClaimId === claimId ? "selected" : "";
+  const statusClass = claim.status === "verified" ? "verified" : claim.status === "flagged" ? "flagged" : "";
+  const selectedClass = selectedClaimId === claimId && claim.status !== "verified" && claim.status !== "flagged" ? "selected" : "";
 
   return (
     <span

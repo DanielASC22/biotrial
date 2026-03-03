@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { Lock, ShieldCheck } from "lucide-react";
+import { Lock, ShieldCheck, User } from "lucide-react";
 import { useAudit } from "@/contexts/AuditContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 
 const StatusBar = () => {
   const { sessionHash, tier3AllVerified, verifiedCount } = useAudit();
+  const { auditor } = useAuth();
   const [displayHash, setDisplayHash] = useState(sessionHash.slice(0, 12));
 
   useEffect(() => {
@@ -30,6 +32,12 @@ const StatusBar = () => {
           <div className="flex items-center gap-1">
             <ShieldCheck className="h-3 w-3 text-compliance" />
             <span className="text-[10px] font-semibold text-compliance font-data">REGULATORY READY</span>
+          </div>
+        )}
+        {auditor && (
+          <div className="flex items-center gap-1.5">
+            <User className="h-3 w-3 text-muted-foreground" />
+            <span className="text-[10px] font-data text-foreground">{auditor.name}</span>
           </div>
         )}
         <div className="flex items-center gap-1.5">

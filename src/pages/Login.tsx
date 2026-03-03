@@ -173,9 +173,6 @@ const Login = () => {
             </div>
           </div>
 
-          <p className="text-[10px] text-center text-muted-foreground">
-            This is a demonstration environment. Any credentials will authenticate.
-          </p>
         </div>
       </div>
     </div>

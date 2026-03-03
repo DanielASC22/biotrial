@@ -122,11 +122,26 @@
 
 @layer components {
   .audit-highlight {
-    @apply bg-amber/15 text-amber-accent font-data underline decoration-amber-accent decoration-2 underline-offset-2 cursor-pointer px-0.5 rounded-sm transition-all;
+    background-color: hsl(43 100% 50% / 0.15);
+    @apply text-amber-accent font-data underline decoration-amber-accent decoration-2 underline-offset-2 cursor-pointer px-0.5 rounded-sm transition-all;
   }
 
   .audit-highlight:hover {
-    @apply bg-amber/25;
+    background-color: hsl(43 100% 50% / 0.25);
+  }
+
+  .audit-highlight.selected {
+    background-color: hsl(43 100% 50% / 0.35);
+    @apply ring-1 ring-amber-accent;
+  }
+
+  .audit-highlight.verified {
+    background-color: hsl(145 63% 42% / 0.15);
+    @apply text-compliance no-underline decoration-compliance;
+  }
+
+  .audit-highlight.verified:hover {
+    background-color: hsl(145 63% 42% / 0.25);
   }
 
   .compliance-pulse {

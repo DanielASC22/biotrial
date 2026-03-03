@@ -123,25 +123,34 @@
 @layer components {
   .audit-highlight {
     background-color: hsl(43 100% 50% / 0.15);
-    @apply text-amber-accent font-data underline decoration-amber-accent decoration-2 underline-offset-2 cursor-pointer px-0.5 rounded-sm transition-all;
+    @apply text-amber-accent font-data underline decoration-amber-accent decoration-2 underline-offset-2 cursor-pointer px-0.5 rounded-sm;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .audit-highlight:hover {
-    background-color: hsl(43 100% 50% / 0.25);
+    background-color: hsl(43 100% 50% / 0.3);
+    box-shadow: 0 0 0 2px hsl(43 100% 50% / 0.15);
   }
 
   .audit-highlight.selected {
     background-color: hsl(43 100% 50% / 0.35);
-    @apply ring-1 ring-amber-accent;
+    @apply ring-2 ring-amber-accent/60;
+    box-shadow: 0 0 12px hsl(43 100% 50% / 0.2);
   }
 
   .audit-highlight.verified {
     background-color: hsl(145 63% 42% / 0.15);
-    @apply text-compliance no-underline decoration-compliance;
+    @apply text-compliance no-underline;
+    box-shadow: none;
   }
 
   .audit-highlight.verified:hover {
     background-color: hsl(145 63% 42% / 0.25);
+  }
+
+  .audit-highlight.flagged {
+    background-color: hsl(0 84% 60% / 0.12);
+    @apply text-destructive line-through decoration-destructive/60;
   }
 
   .compliance-pulse {
@@ -149,12 +158,8 @@
   }
 
   @keyframes pulse-compliance {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
   }
 
   .integrity-hash {

@@ -25,7 +25,6 @@ const navItems = [
 export function AuditSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
-  const location = useLocation();
 
   return (
     <Sidebar collapsible="icon">
@@ -70,12 +69,7 @@ export function AuditSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="p-3">
-        {!collapsed && <ComplianceHeartbeat />}
-        {collapsed && (
-          <div className="flex justify-center">
-            <span className="h-2 w-2 rounded-full bg-compliance compliance-pulse" />
-          </div>
-        )}
+        <ComplianceHeartbeat collapsed={collapsed} />
       </SidebarFooter>
     </Sidebar>
   );

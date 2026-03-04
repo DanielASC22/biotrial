@@ -1,34 +1,26 @@
 import { Shield, ShieldCheck } from "lucide-react";
-import { useAudit } from "@/contexts/AuditContext";
+import { useStudy } from "@/contexts/StudyContext";
 import { cn } from "@/lib/utils";
 
 const ComplianceHeartbeat = ({ collapsed = false }: { collapsed?: boolean }) => {
-  const { tier3AllVerified } = useAudit();
+  const { tier3AllVerified } = useStudy();
 
   if (collapsed) {
     return (
       <div className="flex justify-center">
-        <span
-          className={cn(
-            "h-2.5 w-2.5 rounded-full transition-all duration-700",
-            tier3AllVerified
-              ? "bg-primary shadow-[0_0_8px_hsl(var(--primary)/0.6)]"
-              : "bg-amber-accent compliance-pulse"
-          )}
-        />
+        <span className={cn(
+          "h-2.5 w-2.5 rounded-full transition-all duration-700",
+          tier3AllVerified ? "bg-primary shadow-[0_0_8px_hsl(var(--primary)/0.6)]" : "bg-amber-accent compliance-pulse"
+        )} />
       </div>
     );
   }
 
   return (
-    <div
-      className={cn(
-        "flex items-center gap-2 px-3 py-2.5 rounded-md transition-all duration-700",
-        tier3AllVerified
-          ? "bg-primary/15 border border-primary/30"
-          : "bg-sidebar-accent border border-transparent"
-      )}
-    >
+    <div className={cn(
+      "flex items-center gap-2 px-3 py-2.5 rounded-md transition-all duration-700",
+      tier3AllVerified ? "bg-primary/15 border border-primary/30" : "bg-sidebar-accent border border-transparent"
+    )}>
       <div className="relative">
         {tier3AllVerified ? (
           <ShieldCheck className="h-4 w-4 text-primary" />
@@ -46,9 +38,7 @@ const ComplianceHeartbeat = ({ collapsed = false }: { collapsed?: boolean }) => 
         )}>
           {tier3AllVerified ? "ALL TIER 3 VERIFIED" : "AWAITING REVIEW"}
         </span>
-        <span className="text-[9px] text-sidebar-foreground/50 font-data">
-          21 CFR Part 11
-        </span>
+        <span className="text-[9px] text-sidebar-foreground/50 font-data">21 CFR Part 11</span>
       </div>
     </div>
   );

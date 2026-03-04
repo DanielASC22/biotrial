@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
-import { useAudit } from "@/contexts/AuditContext";
+import { useStudy } from "@/contexts/StudyContext";
 import { cn } from "@/lib/utils";
-import type { ClaimData } from "@/lib/claim-data";
+import { STUDY_REPORT_SECTIONS } from "@/lib/study-data";
 
 interface ClaimSpanProps {
   claimId: string;
@@ -9,7 +9,7 @@ interface ClaimSpanProps {
 }
 
 const ClaimSpan = ({ claimId, children }: ClaimSpanProps) => {
-  const { claims, selectedClaimId, selectClaim } = useAudit();
+  const { claims, selectedClaimId, selectClaim } = useStudy();
   const claim = claims[claimId];
   if (!claim) return <span>{children}</span>;
 
@@ -31,18 +31,60 @@ const ClaimSpan = ({ claimId, children }: ClaimSpanProps) => {
 };
 
 const StudyReportViewer = () => {
-  const { pendingCount, verifiedCount, claims } = useAudit();
+  const { pendingCount, verifiedCount, flaggedCount, claims, activeStudy, activeStudyId } = useStudy();
   const totalClaims = Object.keys(claims).length;
+  const sections = STUDY_REPORT_SECTIONS[activeStudyId] ?? [];
+
+  // Render content with claim placeholders replaced by ClaimSpan components
+  const renderContent = (content: string, claimIds: string[]) => {
+    const parts: (string | React.ReactNode)[] = [];
+    let remaining = content;
+    let key = 0;
+
+    // Find all {claimId} placeholders and replace with ClaimSpan
+    const regex = /\{([^}]+)\}/g;
+    let match;
+    let lastIndex = 0;
+
+    const matches: { index: number; length: number; claimId: string }[] = [];
+    while ((match = regex.exec(content)) !== null) {
+      matches.push({ index: match.index, length: match[0].length, claimId: match[1] });
+    }
+
+    for (const m of matches) {
+      if (m.index > lastIndex) {
+        parts.push(content.slice(lastIndex, m.index));
+      }
+      const claim = claims[m.claimId];
+      parts.push(
+        <ClaimSpan key={key++} claimId={m.claimId}>
+          {claim?.value ?? m.claimId}
+        </ClaimSpan>
+      );
+      lastIndex = m.index + m.length;
+    }
+    if (lastIndex < content.length) {
+      parts.push(content.slice(lastIndex));
+    }
+
+    return parts;
+  };
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header */}
       <div className="flex items-center justify-between border-b px-4 py-3">
         <div>
           <h2 className="text-sm font-semibold text-foreground">Study Report Viewer</h2>
-          <p className="text-xs text-muted-foreground font-data">CSR-2026-0042 • Phase III</p>
+          <p className="text-xs text-muted-foreground font-data">
+            {activeStudy?.id.toUpperCase() ?? "—"} • {activeStudy?.phase ?? "—"}
+          </p>
         </div>
         <div className="flex items-center gap-2">
+          {flaggedCount > 0 && (
+            <Badge variant="outline" className="text-xs font-data border-destructive text-destructive">
+              {flaggedCount} Flagged
+            </Badge>
+          )}
           {pendingCount > 0 && (
             <Badge variant="outline" className="text-xs font-data border-amber-accent text-amber-accent">
               {pendingCount} Pending
@@ -56,47 +98,21 @@ const StudyReportViewer = () => {
         </div>
       </div>
 
-      {/* Report Content */}
       <div className="flex-1 overflow-auto p-6 space-y-6">
-        <div>
-          <h3 className="text-base font-semibold mb-2">3.1 Primary Efficacy Analysis</h3>
-          <p className="text-sm leading-relaxed text-foreground/90">
-            The primary endpoint of the study was the change from baseline in HbA1c at Week 24.
-            The treatment group demonstrated a statistically significant reduction in HbA1c of{" "}
-            <ClaimSpan claimId="c001">−1.4%</ClaimSpan>{" "}
-            (95% CI: <ClaimSpan claimId="c002">−1.7, −1.1</ClaimSpan>)
-            compared with placebo (p{"<"}0.001). The proportion of patients achieving HbA1c{" "}
-            {"<"}7.0% was <ClaimSpan claimId="c003">62.3%</ClaimSpan>{" "}
-            in the treatment group versus{" "}
-            <ClaimSpan claimId="c004">28.1%</ClaimSpan> in the placebo group.
-          </p>
-        </div>
+        {sections.map((section) => (
+          <div key={section.title}>
+            <h3 className="text-base font-semibold mb-2">{section.title}</h3>
+            <p className="text-sm leading-relaxed text-foreground/90">
+              {renderContent(section.content, section.claimIds)}
+            </p>
+          </div>
+        ))}
 
-        <div>
-          <h3 className="text-base font-semibold mb-2">3.2 Safety Summary</h3>
-          <p className="text-sm leading-relaxed text-foreground/90">
-            A total of <ClaimSpan claimId="c005">847 patients</ClaimSpan>{" "}
-            were randomized and received at least one dose of the study drug. Adverse events (AEs)
-            were reported in <ClaimSpan claimId="c006">43.2%</ClaimSpan>{" "}
-            of patients in the treatment group and{" "}
-            <ClaimSpan claimId="c007">38.9%</ClaimSpan> in the placebo
-            group. The most common AEs included nausea (
-            <ClaimSpan claimId="c008">8.7%</ClaimSpan>), headache (
-            <ClaimSpan claimId="c009">6.2%</ClaimSpan>), and injection
-            site reactions (<ClaimSpan claimId="c010">4.1%</ClaimSpan>).
-          </p>
-        </div>
-
-        <div>
-          <h3 className="text-base font-semibold mb-2">3.3 Serious Adverse Events</h3>
-          <p className="text-sm leading-relaxed text-foreground/90">
-            Serious adverse events (SAEs) occurred in{" "}
-            <ClaimSpan claimId="c011">5.2%</ClaimSpan> of patients in
-            the treatment group. No deaths were attributed to the study drug. One case of
-            pancreatitis was reported and adjudicated by an independent committee. The overall
-            benefit-risk profile remains favorable based on the integrated safety analysis.
-          </p>
-        </div>
+        {sections.length === 0 && (
+          <div className="flex items-center justify-center h-40 text-muted-foreground text-sm">
+            No report sections available for this study.
+          </div>
+        )}
       </div>
     </div>
   );

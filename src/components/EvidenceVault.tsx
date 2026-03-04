@@ -3,11 +3,11 @@ import { FileText, Upload, Calendar, Hash, User, Link2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { useAudit, type SourceDocument } from "@/contexts/AuditContext";
+import { useStudy, type SourceDocument } from "@/contexts/StudyContext";
 import { cn } from "@/lib/utils";
 
 const EvidenceVault = () => {
-  const { documents, addDocument, selectedDocId, selectDocument } = useAudit();
+  const { documents, addDocument, selectedDocId, selectDocument } = useStudy();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const selectedDoc = documents.find(d => d.id === selectedDocId);
 

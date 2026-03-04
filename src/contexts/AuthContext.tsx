@@ -11,25 +11,16 @@ export interface Auditor {
 
 const DEMO_AUDITORS: Record<string, Auditor> = {
   "dr.chen": {
-    id: "aud-001",
-    name: "Dr. Sarah Chen",
-    role: "Lead Clinical Reviewer",
-    department: "Regulatory Affairs",
-    clearanceLevel: "Tier 3",
+    id: "aud-001", name: "Dr. Sarah Chen", role: "Lead Clinical Reviewer",
+    department: "Regulatory Affairs", clearanceLevel: "Tier 3",
   },
   "dr.miller": {
-    id: "aud-002",
-    name: "Dr. James Miller",
-    role: "Biostatistician",
-    department: "Data Sciences",
-    clearanceLevel: "Tier 2",
+    id: "aud-002", name: "Dr. James Miller", role: "Biostatistician",
+    department: "Data Sciences", clearanceLevel: "Tier 2",
   },
   "dr.patel": {
-    id: "aud-003",
-    name: "Dr. Priya Patel",
-    role: "Safety Officer",
-    department: "Pharmacovigilance",
-    clearanceLevel: "Tier 3",
+    id: "aud-003", name: "Dr. Priya Patel", role: "Safety Officer",
+    department: "Pharmacovigilance", clearanceLevel: "Tier 3",
   },
 };
 
@@ -49,17 +40,14 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [auditor, setAuditor] = useState<Auditor | null>(() => {
-    const stored = sessionStorage.getItem("bio-audit-user");
-    return stored ? JSON.parse(stored) : null;
-  });
+  // No sessionStorage persistence — refresh always returns to login
+  const [auditor, setAuditor] = useState<Auditor | null>(null);
 
   const login = useCallback((username: string, _password: string) => {
     const key = username.toLowerCase().replace(/\s/g, "");
     const found = DEMO_AUDITORS[key];
     if (found) {
       setAuditor(found);
-      sessionStorage.setItem("bio-audit-user", JSON.stringify(found));
       return true;
     }
     return false;
@@ -67,7 +55,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(() => {
     setAuditor(null);
-    sessionStorage.removeItem("bio-audit-user");
   }, []);
 
   return (

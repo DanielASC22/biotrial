@@ -20,6 +20,21 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+function ProtectedLayout() {
+  return (
+    <SidebarProvider>
+      <ProtectedRoute>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/evidence" element={<Evidence />} />
+          <Route path="/reports" element={<Reports />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </ProtectedRoute>
+    </SidebarProvider>
+  );
+}
+
 function PublicRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
   if (isAuthenticated) return <Navigate to="/" replace />;
@@ -34,15 +49,10 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <StudyProvider>
-            <SidebarProvider>
-              <Routes>
-                <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
-                <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
-                <Route path="/evidence" element={<ProtectedRoute><Evidence /></ProtectedRoute>} />
-                <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </SidebarProvider>
+            <Routes>
+              <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+              <Route path="/*" element={<ProtectedLayout />} />
+            </Routes>
           </StudyProvider>
         </AuthProvider>
       </BrowserRouter>

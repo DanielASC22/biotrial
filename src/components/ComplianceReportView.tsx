@@ -61,10 +61,10 @@ const ComplianceReportView = () => {
         </div>
 
         {verifiedClaims.length > 0 && (
-          <ClaimSection title="Verified Claims" icon={<ShieldCheck className="h-4 w-4 text-compliance" />} claims={verifiedClaims} auditorName={auditor?.name} />
+          <ClaimSection title="Verified Claims" icon={<ShieldCheck className="h-4 w-4 text-compliance" />} claims={verifiedClaims} showAuditor />
         )}
         {flaggedClaims.length > 0 && (
-          <ClaimSection title="Flagged for Review" icon={<Flag className="h-4 w-4 text-destructive" />} claims={flaggedClaims} auditorName={auditor?.name} />
+          <ClaimSection title="Flagged for Review" icon={<Flag className="h-4 w-4 text-destructive" />} claims={flaggedClaims} showAuditor />
         )}
         {pendingClaims.length > 0 && (
           <ClaimSection title="Pending Verification" icon={<AlertTriangle className="h-4 w-4 text-amber-accent" />} claims={pendingClaims} />
@@ -90,7 +90,7 @@ function SummaryCard({ label, value, icon, highlight = false }: { label: string;
   );
 }
 
-function ClaimSection({ title, icon, claims, auditorName }: { title: string; icon: React.ReactNode; claims: ClaimData[]; auditorName?: string }) {
+function ClaimSection({ title, icon, claims, showAuditor }: { title: string; icon: React.ReactNode; claims: ClaimData[]; showAuditor?: boolean }) {
   return (
     <div className="space-y-3">
       <h3 className="text-sm font-semibold text-foreground flex items-center gap-1.5">{icon} {title} ({claims.length})</h3>
@@ -103,7 +103,7 @@ function ClaimSection({ title, icon, claims, auditorName }: { title: string; ico
               <th className="px-3 py-2 text-left font-medium text-[10px] uppercase tracking-wider">Section</th>
               <th className="px-3 py-2 text-left font-medium text-[10px] uppercase tracking-wider">Source</th>
               <th className="px-3 py-2 text-center font-medium text-[10px] uppercase tracking-wider">Tier</th>
-              {auditorName && <th className="px-3 py-2 text-left font-medium text-[10px] uppercase tracking-wider">Auditor</th>}
+              {showAuditor && <th className="px-3 py-2 text-left font-medium text-[10px] uppercase tracking-wider">Auditor</th>}
             </tr>
           </thead>
           <tbody>
@@ -118,7 +118,7 @@ function ClaimSection({ title, icon, claims, auditorName }: { title: string; ico
                     T{claim.tier}
                   </Badge>
                 </td>
-                {auditorName && <td className="px-3 py-2 text-[10px]">{auditorName}</td>}
+                {showAuditor && <td className="px-3 py-2 text-[10px]">{claim.verifiedBy ?? "—"}</td>}
               </tr>
             ))}
           </tbody>

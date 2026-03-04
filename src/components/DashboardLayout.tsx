@@ -3,7 +3,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AuditSidebar } from "@/components/AuditSidebar";
 import StatusBar from "@/components/StatusBar";
 import ComplianceReportModal from "@/components/ComplianceReportModal";
-import { StudyProvider, useStudy } from "@/contexts/StudyContext";
+import { useStudy } from "@/contexts/StudyContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
@@ -14,7 +14,7 @@ interface DashboardLayoutProps {
   activeView?: "audit" | "vault" | "reports";
 }
 
-function DashboardInner({ children, activeView }: DashboardLayoutProps) {
+const DashboardLayout = ({ children, activeView = "audit" }: DashboardLayoutProps) => {
   const { auditor, logout } = useAuth();
   const { activeStudy } = useStudy();
   const navigate = useNavigate();
@@ -62,14 +62,6 @@ function DashboardInner({ children, activeView }: DashboardLayoutProps) {
         </div>
       </div>
     </SidebarProvider>
-  );
-}
-
-const DashboardLayout = ({ children, activeView = "audit" }: DashboardLayoutProps) => {
-  return (
-    <StudyProvider>
-      <DashboardInner activeView={activeView}>{children}</DashboardInner>
-    </StudyProvider>
   );
 };
 

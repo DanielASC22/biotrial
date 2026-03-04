@@ -3,7 +3,8 @@ import { FileText, Upload, Calendar, Hash, User, Link2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { useStudy, type SourceDocument } from "@/contexts/StudyContext";
+import { useStudy } from "@/contexts/StudyContext";
+import type { SourceDocument } from "@/lib/study-data";
 import { cn } from "@/lib/utils";
 
 const EvidenceVault = () => {

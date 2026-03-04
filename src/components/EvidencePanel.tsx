@@ -103,7 +103,12 @@ const EvidencePanel = () => {
             {selectedClaim.status === "verified" && (
               <div className="flex items-center gap-2 rounded-md border border-compliance/30 bg-compliance/5 px-3 py-2">
                 <ShieldCheck className="h-4 w-4 text-compliance" />
-                <span className="text-xs font-semibold text-compliance">Verified & Sealed</span>
+                <div>
+                  <span className="text-xs font-semibold text-compliance">Verified & Sealed</span>
+                  {selectedClaim.verifiedBy && (
+                    <p className="text-[10px] text-muted-foreground">by {selectedClaim.verifiedBy}</p>
+                  )}
+                </div>
               </div>
             )}
 
@@ -111,7 +116,12 @@ const EvidencePanel = () => {
               <div className="space-y-2">
                 <div className="flex items-center gap-2 rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2">
                   <Flag className="h-4 w-4 text-destructive" />
-                  <span className="text-xs font-semibold text-destructive">Flagged for Review</span>
+                  <div>
+                    <span className="text-xs font-semibold text-destructive">Flagged for Review</span>
+                    {selectedClaim.verifiedBy && (
+                      <p className="text-[10px] text-muted-foreground">flagged by {selectedClaim.verifiedBy}</p>
+                    )}
+                  </div>
                 </div>
                 <Button
                   variant="outline"

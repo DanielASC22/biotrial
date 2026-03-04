@@ -14,6 +14,7 @@ export interface ClaimData {
   sourceRef: string;
   sourceSnippet: string;
   section: string;
+  verifiedBy?: string;
 }
 
 // Tier 3 categories require double-blind verification

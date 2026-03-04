@@ -14,13 +14,13 @@ const DEMO_AUDITORS: Record<string, Auditor> = {
     id: "aud-001", name: "Dr. Sarah Chen", role: "Lead Clinical Reviewer",
     department: "Regulatory Affairs", clearanceLevel: "Tier 3",
   },
-  "dr.miller": {
-    id: "aud-002", name: "Dr. James Miller", role: "Biostatistician",
-    department: "Data Sciences", clearanceLevel: "Tier 2",
-  },
   "dr.patel": {
     id: "aud-003", name: "Dr. Priya Patel", role: "Safety Officer",
     department: "Pharmacovigilance", clearanceLevel: "Tier 3",
+  },
+  "dr.miller": {
+    id: "aud-002", name: "Dr. James Miller", role: "Biostatistician",
+    department: "Data Sciences", clearanceLevel: "Tier 2",
   },
 };
 

@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { StudyProvider } from "@/contexts/StudyContext";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Evidence from "./pages/Evidence";
@@ -33,13 +34,15 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <StudyProvider>
-            <Routes>
-              <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
-              <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
-              <Route path="/evidence" element={<ProtectedRoute><Evidence /></ProtectedRoute>} />
-              <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <SidebarProvider>
+              <Routes>
+                <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+                <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+                <Route path="/evidence" element={<ProtectedRoute><Evidence /></ProtectedRoute>} />
+                <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </SidebarProvider>
           </StudyProvider>
         </AuthProvider>
       </BrowserRouter>

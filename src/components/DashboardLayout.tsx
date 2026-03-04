@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { AuditSidebar } from "@/components/AuditSidebar";
 import StatusBar from "@/components/StatusBar";
 import ComplianceReportModal from "@/components/ComplianceReportModal";
@@ -25,7 +25,6 @@ const DashboardLayout = ({ children, activeView = "audit" }: DashboardLayoutProp
   };
 
   return (
-    <SidebarProvider>
       <div className="min-h-screen flex w-full">
         <AuditSidebar />
         <div className="flex-1 flex flex-col min-h-screen">
@@ -61,7 +60,6 @@ const DashboardLayout = ({ children, activeView = "audit" }: DashboardLayoutProp
           <StatusBar />
         </div>
       </div>
-    </SidebarProvider>
   );
 };
 

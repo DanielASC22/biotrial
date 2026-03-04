@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Lock, ShieldCheck, User } from "lucide-react";
-import { useAudit } from "@/contexts/AuditContext";
+import { useStudy } from "@/contexts/StudyContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 
 const StatusBar = () => {
-  const { sessionHash, tier3AllVerified, verifiedCount } = useAudit();
+  const { sessionHash, tier3AllVerified, verifiedCount } = useStudy();
   const { auditor } = useAuth();
   const [displayHash, setDisplayHash] = useState(sessionHash.slice(0, 12));
 

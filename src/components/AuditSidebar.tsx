@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+
 
 const navItems = [
   { title: "Active Trials", url: "/", icon: FlaskConical },
@@ -30,11 +30,8 @@ const statusIcons: Record<StudyStatus, typeof Clock> = {
 export function AuditSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
-  const { studies, activeStudyId, setActiveStudyId, assignStudy } = useStudy();
+  const { studies, activeStudyId, setActiveStudyId, assignStudy, sidebarOpenSections: openSections, setSidebarOpenSections: setOpenSections } = useStudy();
   const { auditor } = useAuth();
-  const [openSections, setOpenSections] = useState<Record<string, boolean>>({
-    in_review: true, flagged: true, pending_assignment: false, completed: false,
-  });
 
   const studiesByStatus = statusOrder.reduce((acc, status) => {
     acc[status] = studies.filter(s => s.status === status);

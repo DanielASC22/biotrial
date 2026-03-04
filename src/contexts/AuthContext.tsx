@@ -62,13 +62,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       sessionStorage.setItem("bio-audit-user", JSON.stringify(found));
       return true;
     }
-    // Any non-empty credentials work for demo — uses first auditor
-    if (username.trim()) {
-      const defaultAuditor = DEMO_AUDITORS["dr.chen"];
-      setAuditor(defaultAuditor);
-      sessionStorage.setItem("bio-audit-user", JSON.stringify(defaultAuditor));
-      return true;
-    }
     return false;
   }, []);
 

@@ -46,7 +46,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter basename="/biotrial">
         <AuthProvider>
           <StudyProvider>
             <Routes>

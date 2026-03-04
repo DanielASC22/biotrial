@@ -80,7 +80,7 @@ const Login = () => {
 
         <div className="relative z-10">
           <p className="text-[10px] text-primary-foreground/30 font-data">
-            v1.0 • DEMO ENVIRONMENT • NOT FOR PRODUCTION USE
+            Made by Daniel Olusheki for Lovable Buildathon 2026
           </p>
         </div>
       </div>

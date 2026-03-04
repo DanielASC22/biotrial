@@ -30,6 +30,9 @@ interface StudyContextType {
 
   sessionHash: string;
   sessionStartTime: Date;
+
+  sidebarOpenSections: Record<string, boolean>;
+  setSidebarOpenSections: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
 }
 
 const StudyContext = createContext<StudyContextType | null>(null);
@@ -80,6 +83,9 @@ export function StudyProvider({ children }: { children: ReactNode }) {
   const [selectedDocId, setSelectedDocId] = useState<string | null>(null);
   const [sessionHash] = useState(() => generateIntegrityHash("session", "init"));
   const [sessionStartTime] = useState(() => new Date());
+  const [sidebarOpenSections, setSidebarOpenSections] = useState<Record<string, boolean>>({
+    in_review: true, flagged: true, pending_assignment: false, completed: false,
+  });
   const { toast } = useToast();
   const { auditor } = useAuth();
 
@@ -245,6 +251,7 @@ export function StudyProvider({ children }: { children: ReactNode }) {
       pendingCount, verifiedCount, flaggedCount, tier3AllVerified,
       documents, addDocument, selectedDocId, selectDocument,
       sessionHash, sessionStartTime,
+      sidebarOpenSections, setSidebarOpenSections,
     }}>
       {children}
     </StudyContext.Provider>

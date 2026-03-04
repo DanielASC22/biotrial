@@ -36,7 +36,8 @@ const DashboardLayout = ({ children, activeView = "audit" }: DashboardLayoutProp
                 <SidebarTrigger className="ml-1" />
                 <div className="ml-3 flex items-center gap-2">
                   <span className="text-sm font-semibold text-foreground">Bio-Trial Auditor</span>
-                  <span className="text-xs text-muted-foreground font-data">/ CSR-2026-0042</span>
+                  <span className="text-xs text-muted-foreground font-data">/ GLX-DM2-301</span>
+                  <span className="text-[10px] text-muted-foreground hidden md:inline">— Glucovex XR in Type 2 Diabetes</span>
                 </div>
               </div>
               <div className="flex items-center gap-3 mr-2">

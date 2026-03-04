@@ -1,13 +1,16 @@
-import { FileText, Upload, ExternalLink, ShieldCheck, Flag, AlertTriangle } from "lucide-react";
+import { FileText, Upload, ExternalLink, ShieldCheck, Flag, AlertTriangle, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAudit } from "@/contexts/AuditContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { isDoubleBlindRequired } from "@/lib/claim-data";
 import { Separator } from "@/components/ui/separator";
 
 const EvidencePanel = () => {
   const { claims, selectedClaimId, verifyClaim, flagClaim } = useAudit();
+  const { auditor } = useAuth();
   const selectedClaim = selectedClaimId ? claims[selectedClaimId] : null;
+  const insufficientClearance = selectedClaim && isDoubleBlindRequired(selectedClaim) && auditor?.clearanceLevel !== "Tier 3";
 
   return (
     <div className="flex flex-col h-full border-l">
@@ -137,23 +140,39 @@ const EvidencePanel = () => {
             {/* Action buttons */}
             {(selectedClaim.status === "pending" || selectedClaim.status === "awaiting_second") && (
               <div className="space-y-2">
-                <Button
-                  className="w-full bg-compliance text-compliance-foreground hover:bg-compliance/90 font-semibold"
-                  onClick={() => verifyClaim(selectedClaim.id)}
-                >
-                  <ShieldCheck className="h-4 w-4 mr-1" />
-                  {selectedClaim.status === "awaiting_second"
-                    ? "Confirm Verification (2nd Review)"
-                    : "Verify & Sign"}
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full border-destructive/40 text-destructive hover:bg-destructive/10"
-                  onClick={() => flagClaim(selectedClaim.id)}
-                >
-                  <Flag className="h-4 w-4 mr-1" />
-                  Flag Discrepancy
-                </Button>
+                {insufficientClearance ? (
+                  <div className="flex items-start gap-2 rounded-md border border-amber-accent/30 bg-amber-accent/5 px-3 py-3">
+                    <Lock className="h-4 w-4 text-amber-accent mt-0.5 shrink-0" />
+                    <div>
+                      <p className="text-xs font-semibold text-amber-accent">Insufficient Clearance</p>
+                      <p className="text-[10px] text-muted-foreground">
+                        This Tier 3 claim requires <span className="font-semibold">Tier 3 clearance</span> to verify or flag.
+                        Your clearance: <span className="font-data font-semibold">{auditor?.clearanceLevel}</span>.
+                        Contact a Tier 3 auditor (e.g., Dr. Chen or Dr. Patel).
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <Button
+                      className="w-full bg-compliance text-compliance-foreground hover:bg-compliance/90 font-semibold"
+                      onClick={() => verifyClaim(selectedClaim.id)}
+                    >
+                      <ShieldCheck className="h-4 w-4 mr-1" />
+                      {selectedClaim.status === "awaiting_second"
+                        ? "Confirm Verification (2nd Review)"
+                        : "Verify & Sign"}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="w-full border-destructive/40 text-destructive hover:bg-destructive/10"
+                      onClick={() => flagClaim(selectedClaim.id)}
+                    >
+                      <Flag className="h-4 w-4 mr-1" />
+                      Flag Discrepancy
+                    </Button>
+                  </>
+                )}
               </div>
             )}
 

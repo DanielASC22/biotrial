@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useCallback, useMemo, type ReactNo
 import { MOCK_CLAIMS, isDoubleBlindRequired, type ClaimData, type ClaimStatus } from "@/lib/claim-data";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 export interface SourceDocument {
   id: string;
@@ -102,6 +103,7 @@ export function AuditProvider({ children }: { children: ReactNode }) {
   const [selectedDocId, setSelectedDocId] = useState<string | null>(null);
   const [sessionHash] = useState(() => generateIntegrityHash("session", "init"));
   const { toast } = useToast();
+  const { auditor } = useAuth();
 
   const selectClaim = useCallback((id: string) => {
     setSelectedClaimId(id);
@@ -144,6 +146,16 @@ export function AuditProvider({ children }: { children: ReactNode }) {
     const claim = claims[id];
     if (!claim) return;
 
+    // Enforce clearance level
+    if (isDoubleBlindRequired(claim) && auditor?.clearanceLevel !== "Tier 3") {
+      toast({
+        title: "🔒 Insufficient Clearance",
+        description: `Tier 3 claims require Tier 3 clearance. Your level: ${auditor?.clearanceLevel ?? "Unknown"}.`,
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (isDoubleBlindRequired(claim) && claim.status === "pending") {
       setClaims(prev => ({
         ...prev,
@@ -165,11 +177,21 @@ export function AuditProvider({ children }: { children: ReactNode }) {
       title: "✓ Integrity Hash Verified",
       description: `Claim ${id} sealed. Hash: ${hash.slice(0, 16)}…`,
     });
-  }, [claims, toast]);
+  }, [claims, toast, auditor]);
 
   const flagClaim = useCallback(async (id: string) => {
     const claim = claims[id];
     if (!claim) return;
+
+    // Enforce clearance for flagging Tier 3 claims too
+    if (isDoubleBlindRequired(claim) && auditor?.clearanceLevel !== "Tier 3") {
+      toast({
+        title: "🔒 Insufficient Clearance",
+        description: `Tier 3 claims require Tier 3 clearance to flag. Your level: ${auditor?.clearanceLevel ?? "Unknown"}.`,
+        variant: "destructive",
+      });
+      return;
+    }
 
     await insertAuditLog(claim, "flagged");
     setClaims(prev => ({
@@ -181,7 +203,7 @@ export function AuditProvider({ children }: { children: ReactNode }) {
       description: `Claim ${id} flagged for manual review. Audit trail updated.`,
       variant: "destructive",
     });
-  }, [claims, toast]);
+  }, [claims, toast, auditor]);
 
   const pendingCount = Object.values(claims).filter(c => c.status === "pending" || c.status === "awaiting_second").length;
   const verifiedCount = Object.values(claims).filter(c => c.status === "verified").length;

@@ -72,7 +72,7 @@ const ComplianceReportView = () => {
 
         <div className="rounded-lg border border-dashed bg-muted/30 p-4 text-center">
           <p className="text-[10px] text-muted-foreground font-data">
-            GENERATED FOR 21 CFR PART 11 COMPLIANCE DEMONSTRATION • BIO-TRIAL AUDITOR v1.0 • {new Date().toISOString().slice(0, 10)}
+            GENERATED FOR 21 CFR PART 11 COMPLIANCE DEMONSTRATION • BIOTRIAL AUDITOR v1.0 • {new Date().toISOString().slice(0, 10)}
           </p>
         </div>
       </div>

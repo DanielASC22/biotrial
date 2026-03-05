@@ -59,7 +59,7 @@ const ComplianceReportModal = () => {
 
         <div className="flex-1 overflow-auto pr-2" ref={printRef}>
           <div className="mb-6">
-            <h1 style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>Bio-Trial Auditor — Chain of Trust Report</h1>
+            <h1 style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>BioTrial Auditor — Chain of Trust Report</h1>
             <p className="text-xs text-muted-foreground font-data">
               {activeStudy?.id.toUpperCase()} • {activeStudy?.phase} Clinical Study Report
             </p>

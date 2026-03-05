@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Activity, Shield, Lock, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,7 +20,6 @@ const Login = () => {
     setError("");
     setIsLoading(true);
 
-    // Simulate auth delay for demo feel
     await new Promise(r => setTimeout(r, 800));
 
     const success = login(username, password);
@@ -32,7 +32,6 @@ const Login = () => {
   };
 
   const handleQuickLogin = (key: string) => {
-    const auditor = DEMO_AUDITORS[key];
     login(key, "demo");
     navigate("/");
   };
@@ -40,8 +39,12 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-background flex">
       {/* Left panel — branding */}
-      <div className="hidden lg:flex lg:w-[45%] bg-primary flex-col justify-between p-12 relative overflow-hidden">
-        {/* Subtle grid pattern */}
+      <motion.div
+        initial={{ x: -40, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+        className="hidden lg:flex lg:w-[45%] bg-primary flex-col justify-between p-12 relative overflow-hidden"
+      >
         <div className="absolute inset-0 opacity-[0.03]" style={{
           backgroundImage: "linear-gradient(hsl(var(--primary-foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary-foreground)) 1px, transparent 1px)",
           backgroundSize: "40px 40px",
@@ -51,13 +54,18 @@ const Login = () => {
           <div className="flex items-center gap-3 mb-2">
             <Activity className="h-8 w-8 text-sidebar-primary" />
             <div>
-              <h1 className="text-xl font-semibold text-primary-foreground">Bio-Trial Auditor</h1>
+              <h1 className="text-xl font-semibold text-primary-foreground">BioTrial Auditor</h1>
               <p className="text-[10px] font-data text-primary-foreground/50 tracking-widest">21 CFR PART 11 COMPLIANT</p>
             </div>
           </div>
         </div>
 
-        <div className="relative z-10 space-y-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="relative z-10 space-y-6"
+        >
           <blockquote className="text-primary-foreground/80 text-sm leading-relaxed max-w-md">
             "Every AI-generated claim must have a human-verifiable traceability path.
             No exceptions."
@@ -76,22 +84,27 @@ const Login = () => {
               <span className="text-[10px] text-primary-foreground/60">Immutable Audit Trail</span>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         <div className="relative z-10">
           <p className="text-[10px] text-primary-foreground/30 font-data">
             Made by Daniel Olusheki for Lovable Buildathon 2026
           </p>
         </div>
-      </div>
+      </motion.div>
 
       {/* Right panel — login form */}
-      <div className="flex-1 flex items-center justify-center p-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.15, ease: [0.4, 0, 0.2, 1] }}
+        className="flex-1 flex items-center justify-center p-8"
+      >
         <div className="w-full max-w-sm space-y-8">
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center gap-2 justify-center mb-4">
             <Activity className="h-6 w-6 text-amber-accent" />
-            <h1 className="text-lg font-semibold text-foreground">Bio-Trial Auditor</h1>
+            <h1 className="text-lg font-semibold text-foreground">BioTrial Auditor</h1>
           </div>
 
           <div className="space-y-2">
@@ -127,7 +140,13 @@ const Login = () => {
             </div>
 
             {error && (
-              <p className="text-xs text-destructive">{error}</p>
+              <motion.p
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="text-xs text-destructive"
+              >
+                {error}
+              </motion.p>
             )}
 
             <Button type="submit" className="w-full gap-2" disabled={isLoading}>
@@ -154,9 +173,12 @@ const Login = () => {
             </div>
 
             <div className="grid gap-2">
-              {Object.entries(DEMO_AUDITORS).map(([key, auditor]) => (
-                <button
+              {Object.entries(DEMO_AUDITORS).map(([key, auditor], index) => (
+                <motion.button
                   key={key}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 + index * 0.08 }}
                   onClick={() => handleQuickLogin(key)}
                   className="flex items-center justify-between px-3 py-2.5 rounded-md border border-border bg-card hover:bg-muted/60 transition-colors text-left group"
                 >
@@ -168,13 +190,13 @@ const Login = () => {
                     <span className="text-[9px] font-data text-muted-foreground">{auditor.clearanceLevel}</span>
                     <ArrowRight className="h-3 w-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
-                </button>
+                </motion.button>
               ))}
             </div>
           </div>
 
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

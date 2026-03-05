@@ -45,7 +45,7 @@ export function AuditSidebar() {
           <div className="flex items-center gap-2">
             <Activity className="h-6 w-6 text-sidebar-primary" />
             <div>
-              <h1 className="text-sm font-semibold text-sidebar-foreground">Bio-Trial</h1>
+              <h1 className="text-sm font-semibold text-sidebar-foreground">BioTrial</h1>
               <p className="text-[10px] text-sidebar-foreground/60 font-data">AUDITOR v1.0</p>
             </div>
           </div>

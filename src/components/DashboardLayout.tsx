@@ -32,7 +32,7 @@ const DashboardLayout = ({ children, activeView = "audit" }: DashboardLayoutProp
             <div className="flex items-center">
               <SidebarTrigger className="ml-1" />
               <div className="ml-3 flex items-center gap-2">
-                <span className="text-sm font-semibold text-foreground">Bio-Trial Auditor</span>
+                <span className="text-sm font-semibold text-foreground">BioTrial Auditor</span>
                 {activeStudy && (
                   <>
                     <span className="text-xs text-muted-foreground font-data">/ {activeStudy.protocolId}</span>

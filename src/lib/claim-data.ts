@@ -141,9 +141,9 @@ export const MOCK_CLAIMS: Record<string, ClaimData> = {
     category: "patient_vitals",
     tier: 3,
     status: "pending",
-    confidence: 91,
+    confidence: 76,
     sourceRef: "SAE_Narrative_Report.pdf, Page 3",
-    sourceSnippet: "Serious adverse events occurred in 22 of 424 patients (5.2%) in the treatment group. Events included: hospitalization for hypoglycemia (n=3), pancreatitis (n=1), cardiac events (n=2).",
+    sourceSnippet: "Serious adverse events occurred in 24 of 424 patients (5.2%) in the treatment group. Events included: hospitalization for hypoglycemia (n=3), pancreatitis (n=1), cardiac events (n=2). Note: 24/424 = 5.66%, stated percentage does not match raw count.",
     section: "3.3 Serious Adverse Events",
   },
 };

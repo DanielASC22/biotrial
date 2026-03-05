@@ -1,27 +1,21 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BioTrial Auditor</title>
-  <link rel="icon" type="image/png" href="/public/favicon.ico">
-  <meta name="description"
-    content="21 CFR Part 11-compliant audit trail for AI-generated clinical trial data. Human-in-the-Loop verification for regulatory submissions.">
-  <meta name="author" content="BioTrial Auditor" />
-
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="BioTrial Auditor">
-  <meta property="og:description" content="21 CFR Part 11-compliant audit trail for AI-generated clinical trial data.">
-
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="BioTrial Auditor">
-  <meta name="twitter:description" content="21 CFR Part 11-compliant audit trail for AI-generated clinical trial data.">
+  <script type="text/javascript">
+    // GitHub Pages SPA redirect
+    // Converts the path into a query string so index.html can restore it
+    var pathSegmentsToKeep = 1; // "/biotrial" is 1 segment
+    var l = window.location;
+    l.replace(
+      l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+      l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
+      l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+      (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+      l.hash
+    );
+  </script>
 </head>
-
-<body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
-</body>
-
+<body></body>
 </html>

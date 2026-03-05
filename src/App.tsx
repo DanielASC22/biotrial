@@ -41,12 +41,14 @@ function PublicRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+const basename = import.meta.env.MODE === "production" ? "/biotrial" : "/";
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter basename="/biotrial">
+      <BrowserRouter basename={basename}>
         <AuthProvider>
           <StudyProvider>
             <Routes>

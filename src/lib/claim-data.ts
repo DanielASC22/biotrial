@@ -86,9 +86,9 @@ export const MOCK_CLAIMS: Record<string, ClaimData> = {
     category: "adverse_event",
     tier: 3,
     status: "pending",
-    confidence: 94,
+    confidence: 82,
     sourceRef: "AE_Summary_Report.pdf, Page 7",
-    sourceSnippet: "Treatment-emergent adverse events (TEAEs) were reported in 183 of 424 patients (43.2%) in the active treatment arm. Most were mild to moderate in severity (Grade 1–2).",
+    sourceSnippet: "Treatment-emergent adverse events (TEAEs) were reported in 181 of 424 patients (43.2%) in the active treatment arm. Most were mild to moderate in severity (Grade 1–2). Note: numerator/denominator yields 42.7%, not 43.2%.",
     section: "3.2 Safety Summary",
   },
   c007: {
@@ -141,9 +141,9 @@ export const MOCK_CLAIMS: Record<string, ClaimData> = {
     category: "patient_vitals",
     tier: 3,
     status: "pending",
-    confidence: 91,
+    confidence: 76,
     sourceRef: "SAE_Narrative_Report.pdf, Page 3",
-    sourceSnippet: "Serious adverse events occurred in 22 of 424 patients (5.2%) in the treatment group. Events included: hospitalization for hypoglycemia (n=3), pancreatitis (n=1), cardiac events (n=2).",
+    sourceSnippet: "Serious adverse events occurred in 24 of 424 patients (5.2%) in the treatment group. Events included: hospitalization for hypoglycemia (n=3), pancreatitis (n=1), cardiac events (n=2). Note: 24/424 = 5.66%, stated percentage does not match raw count.",
     section: "3.3 Serious Adverse Events",
   },
 };

@@ -1,10 +1,13 @@
 import EvidenceVault from "@/components/EvidenceVault";
 import DashboardLayout from "@/components/DashboardLayout";
+import PageTransition from "@/components/PageTransition";
 
 const EvidencePage = () => {
   return (
     <DashboardLayout activeView="vault">
-      <EvidenceVault />
+      <PageTransition>
+        <EvidenceVault />
+      </PageTransition>
     </DashboardLayout>
   );
 };

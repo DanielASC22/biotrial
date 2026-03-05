@@ -43,7 +43,7 @@ export const STUDY_CLAIMS: Record<string, Record<string, ClaimData>> = {
     c008: { id: "c008", value: "8.7%", category: "adverse_event", tier: 3, status: "pending", confidence: 96, sourceRef: "AE_Summary_Report.pdf, Page 9", sourceSnippet: "Nausea was the most frequently reported TEAE: 37 of 424 patients (8.7%).", section: "3.2 Safety Summary" },
     c009: { id: "c009", value: "6.2%", category: "adverse_event", tier: 3, status: "pending", confidence: 97, sourceRef: "AE_Summary_Report.pdf, Page 9", sourceSnippet: "Headache: reported in 26 of 424 patients (6.2%) in the treatment arm.", section: "3.2 Safety Summary" },
     c010: { id: "c010", value: "4.1%", category: "adverse_event", tier: 3, status: "pending", confidence: 99, sourceRef: "AE_Summary_Report.pdf, Page 10", sourceSnippet: "Injection site reactions: 17 of 424 patients (4.1%). All Grade 1.", section: "3.2 Safety Summary" },
-    c011: { id: "c011", value: "5.2%", category: "patient_vitals", tier: 3, status: "pending", confidence: 91, sourceRef: "SAE_Narrative_Report.pdf, Page 3", sourceSnippet: "Serious adverse events occurred in 22 of 424 patients (5.2%).", section: "3.3 Serious Adverse Events" },
+    c011: { id: "c011", value: "5.2%", category: "patient_vitals", tier: 3, status: "pending", confidence: 76, sourceRef: "SAE_Narrative_Report.pdf, Page 3", sourceSnippet: "Serious adverse events occurred in 24 of 424 patients (5.2%). Events included: hospitalization for hypoglycemia (n=3), pancreatitis (n=1), cardiac events (n=2). Note: 24/424 = 5.66%, stated percentage does not match raw count.", section: "3.3 Serious Adverse Events" },
   },
 
   "csr-2026-0039": {

@@ -22,7 +22,7 @@ const ComplianceReportModal = () => {
     if (!content) return;
     const win = window.open("", "_blank");
     if (!win) return;
-    win.document.write(`<html><head><title>Bio-Trial Auditor — Regulatory Report</title><style>
+    win.document.write(`<html><head><title>BioTrial Auditor — Regulatory Report</title><style>
       body { font-family: 'Inter', sans-serif; color: #1A2B3C; padding: 40px; max-width: 800px; margin: 0 auto; }
       h1 { font-size: 20px; border-bottom: 2px solid #1A2B3C; padding-bottom: 8px; }
       h2 { font-size: 15px; margin-top: 24px; color: #1A2B3C; }
